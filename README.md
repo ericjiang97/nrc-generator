@@ -1,1 +1,1 @@
-# New ReactJS File
+# New ReactJS Component Generator Tool
