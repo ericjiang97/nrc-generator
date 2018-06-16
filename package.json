@@ -1,0 +1,15 @@
+{
+  "name": "new-reactjs-file",
+  "version": "0.1.0",
+  "description": "Generation of New ReactJS File",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Eric Jiang <ericjiang97@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "inquirer": "^6.0.0"
+  }
+}
