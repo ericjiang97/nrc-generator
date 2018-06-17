@@ -1,3 +1,7 @@
+#!/usr/bin/env node
+
+"use strict";
+
 const inquirer = require('inquirer');
 const fs = require('fs');
 const choices = require('./choices')
@@ -62,7 +66,7 @@ class ${componentName} extends React.Component {
 
 export default ${componentName}`
 
-generateComponent = (fileName, reactType) => {
+const generateComponent = (fileName, reactType) => {
     switch(reactType){
         case choices.LIFECYCLE:
             // generate lifecycle (constructor, etc.)

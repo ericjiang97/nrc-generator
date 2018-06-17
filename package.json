@@ -1,8 +1,11 @@
 {
-  "name": "new-reactjs-file",
+  "name": "new-react-component",
   "version": "0.1.0",
   "description": "Generation of New ReactJS File",
   "main": "index.js",
+  "bin": {
+    "nrc": "./index.js"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
