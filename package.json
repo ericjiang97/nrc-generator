@@ -1,10 +1,13 @@
 {
   "name": "new-react-component",
-  "version": "0.1.2",
+  "version": "0.1.2-hotfix1",
   "description": "Generation of New ReactJS File",
   "main": "index.js",
   "bin": {
     "nrc": "./index.js"
+  },
+  "repository": {
+    "url": "https://github.com/lorderikir/nrc-generator"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,6 +15,7 @@
   "author": "Eric Jiang <ericjiang97@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "chalk": "^2.4.1",
     "fs": "^0.0.1-security",
     "inquirer": "^6.0.0"
   }
