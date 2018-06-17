@@ -7,70 +7,45 @@ const fs = require('fs');
 const choices = require('./choices')
 const CHOICES = Object.values(choices)
 
+const Logger = require('./utils/logger')
+
 const INITIAL_QUESTIONS = require('./questions/initial')
 const QUESTIONS_REACT_LIFECYCLE = require('./questions/ReactClass')
 const QUESTIONS_PROPS = require('./questions/props')
 
 
+const generateClassComponent = require('./generators/REACT_CLASS')
+const functionalComponent = require('./generators/REACT_FUNCTIONAL')
 
 inquirer.prompt(INITIAL_QUESTIONS)
     .then(answers => {
-        generateComponent(answers.fileName, answers.fileTypeChoice)
+        generateComponent(answers.fileName, answers.fileTypeChoice, answers.props)
     });
 
-const functionalComponent = componentName => `import React from 'react' 
-export default ${componentName} = (props) => { 
-    return (<div />)
-}`
-
-
-
-const reactComponent = (componentName, constructor, props) => {
-    const useProps = props.length > 0
-    return `import React from 'react'
-
-    class ${componentName} extends React.Component {
-        ${constructor ? `constructor(props){
-            super(props);
-            this.state = {
-                
-            }
-        }` :  'state = {}'}
-        render(){
-            ${useProps && `const { ${props.join(', ')} } = this.props`}
-            return(
-                <div />
-            )
-        }
-    }
-    
-    export default ${componentName}`
-}
-
-const generateComponent = (fileName, reactType) => {
+const generateComponent = (fileName, reactType, useProps) => {
     switch (reactType) {
         case choices.LIFECYCLE:
             // generate lifecycle (constructor, etc.)
             const path = './' + fileName + '.js'
-            console.log('Generating lifecycle component')
-
-            const LIFECYCLE_ANSWERS = {}
+            Logger.log('Generating lifecycle component')
 
             if (fs.existsSync(path)) {
-                console.error('File Already Exists')
+                Logger.error('File Already Exists. Exiting...')
                 break;
             }
             inquirer.prompt(QUESTIONS_REACT_LIFECYCLE)
                 .then(answers => {
-                    if (answers.props) {
+                    Logger.dev(JSON.stringify(answers))
+                    const lifeCycleFunctions = answers.lifeCycleFunctions
+                    if (useProps) {
                         inquirer.prompt(QUESTIONS_PROPS).then(answers => {
                             const props = answers.props.split(',')
-                            fs.writeFile(path, reactComponent(fileName, answers.constructor, props), err => {
+                            fs.writeFile(path, generateClassComponent(fileName, answers.constructor, props, lifeCycleFunctions), err => {
                                 console.error(err)
                             })
                         })
                     } else {
-                        fs.writeFile(path, reactComponent(fileName, answers.constructor, props = []), err => {
+                        fs.writeFile(path, generateClassComponent(fileName, answers.constructor, [], lifeCycleFunctions), err => {
                             console.error(err)
                         })
                     }
@@ -78,10 +53,26 @@ const generateComponent = (fileName, reactType) => {
             break;
         default:
             // generate functional class file
-            console.log('Generating functional component')
-            fs.writeFile('./' + fileName + '.js', functionalComponent(fileName), err => {
-                console.error(err)
-            })
+            Logger.log('Generating functional component')
+
+            if (useProps) {
+                inquirer.prompt(QUESTIONS_PROPS).then(answers => {
+                    const props = answers.props.split(',')
+                    fs.writeFile('./' + fileName + '.js', functionalComponent(fileName, props), err => {
+                        if (err) {
+                            Logger.error(err)
+                        }
+                        Logger.log('SUCCESFULLY CREATED COMPONENT')
+                    })
+                })
+            } else {
+                fs.writeFile('./' + fileName + '.js', functionalComponent(fileName), err => {
+                    if (err) {
+                        Logger.error(err)
+                    }
+                    Logger.log('SUCCESFULLY CREATED COMPONENT')
+                })
+            }
             break;
 
     }

@@ -15,6 +15,11 @@ const INITAL_QUESTIONS = [{
       if (/^([A-Za-z\-\_\d])+$/.test(input)) return true;
       else return 'File name may only include letters, numbers, underscores and hashes.';
     }
+  }, {
+    name: 'props',
+    type: 'confirm',
+    message: 'Would you like props in your component?',
+    default: false
   }
 ];
 
